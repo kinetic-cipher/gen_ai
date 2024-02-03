@@ -19,12 +19,12 @@ https://www.youtube.com/watch?v=DkBc4hfGle8
 
 # constants
 QUERY_TYPE1 = "basic math query"
-QUERY_TYPE2 = "calculus or symbolic math query"
+QUERY_TYPE2 = "algebra or calculus or symbolic math query"
 QUERY_TYPE3 = "math word problem"
 QUERY_TYPE4 = "generic query"
 
 TEMPERATURE = 0
-REQ_TIMEOUT = 120
+REQ_TIMEOUT = 20
 
 
 class MathAgent:
@@ -53,7 +53,7 @@ class MathAgent:
         self.llm_symbolic_math=LLMSymbolicMathChain.from_llm(self.llm, verbose=True)
 
         # word problem LLM
-        self.palchain = PALChain.from_math_prompt(llm=self.llm, verbose=True)
+        self.palchain = PALChain.from_math_prompt(llm=self.llm, verbose=True, timeout=REQ_TIMEOUT)
 
 
     def run(self, user_input: str):
@@ -62,35 +62,28 @@ class MathAgent:
         category_response = self.llm_chat.invoke({"query_type1":QUERY_TYPE1,"query_type2":QUERY_TYPE2,
                                                  "query_type3":QUERY_TYPE3, "query_type4":QUERY_TYPE4, "user_input":user_input})
      
-        # run in verbose mode (print full category response)
-        print("full category response:")
-        print (category_response)
-
-
         # call the appropriate chain
-        # note: use invoke on generic queries but run on math queries (get errors with invoke)
         category_response_txt = category_response["text"]
 
         if "basic" in category_response_txt:
             print("\n(interpreting as a basic math query)") 
-            response = self.llm_basic_math.run(user_input)
-            #response = self.llm_basic_math.invoke(user_input)
-            #response = response["answer"]
+            #response = self.llm_basic_math.run(user_input)
+            response = self.llm_basic_math.invoke(user_input)
+            response = response["answer"]
         elif "symbolic" in category_response_txt:
             print("\n(interpreting as a symbolic math query)") 
-            response = self.llm_symbolic_math.run(user_input)
-            #response = self.llm_symbolic_math.invoke(user_input)
-            #response = response["answer"]
+            #response = self.llm_symbolic_math.run(user_input)
+            response = self.llm_symbolic_math.invoke(user_input)
+            response = response["answer"]
         elif "word" in category_response_txt:
             print("\n(interpreting as a word problem)") 
-            response = self.palchain.run(user_input)
-            #response = self.palchain.invoke(user_input)
-            #response = response["answer"]
+            #response = self.palchain.run(user_input)
+            response = self.palchain.invoke(user_input)
+            response = response["result"]
         else:
             print("\n(interpreting as a generic query)") 
             response = self.llm_chat_generic.invoke({"user_input":user_input})
             response = response["text"]
 
         return response
-
 

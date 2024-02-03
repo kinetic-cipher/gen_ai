@@ -15,18 +15,19 @@ class AIChatUI:
         master.configure(bg='#404040')
 
         # Create user input text box
-        self.user_label = tk.Label(master, text="User:", fg='#00bfff', bg='#404040')
+        self.user_label = tk.Label(master, text="User:", fg='#00bfff', bg='#404040', font=("Arial",18))
         self.user_label.pack()
 
         self.user_text_box = scrolledtext.ScrolledText(master, wrap=tk.WORD, width=80, height=10, bg='#1a1a1a',
-                                                       fg='#00bfff', insertbackground='#66ff66')
+                                                       fg='#00bfff', insertbackground='#66ff66', font=("Arial", 18))
         self.user_text_box.pack(pady=5)
 
         # Create AI response text box
-        self.ai_label = tk.Label(master, text="AI:", fg='#00bfff', bg='#404040')
+        self.ai_label = tk.Label(master, text="AI:", fg='#00bfff', bg='#404040', font=("Arial",18))
         self.ai_label.pack()
 
-        self.ai_text_box = scrolledtext.ScrolledText(master, wrap=tk.WORD, width=80, height=40, bg='#1a1a1a', fg='#0066cc')
+        self.ai_text_box = scrolledtext.ScrolledText(master, wrap=tk.WORD, width=80, height=40, bg='#1a1a1a', fg='#0066cc',
+                                                     font=("Arial",18))
         self.ai_text_box.pack(pady=5)
 
         # Set custom color scheme for the text boxes
@@ -59,7 +60,7 @@ class AIChatUI:
         response = self.math_agent.run(user_query)
 
         # Display AI's response in the AI text box
-        self.ai_text_box.insert(tk.END, response, 'ai')
+        self.ai_text_box.insert(tk.END, "\n"+response, 'ai')
 
         # Scroll the text boxes upward
         self.user_text_box.yview(tk.END)
