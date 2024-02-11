@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import scrolledtext
-from math_agent import MathAgent
+#from math_agent import MathAgent
+from multi_modal_agent import MultiModalAgent
 
 class AIChatUI:
 
@@ -43,7 +44,8 @@ class AIChatUI:
         initializer/constructor
         """
         self._setupUI(master)
-        self.math_agent = MathAgent()
+        #self.math_agent = MathAgent()
+        self.multi_modal_agent = MultiModalAgent()
 
     def process_query(self, event):
 
@@ -57,7 +59,8 @@ class AIChatUI:
         self.user_text_box.insert(tk.END, "\n" + user_query, 'user')
 
         # Call the math agent
-        response = self.math_agent.run(user_query)
+        #response = self.math_agent.run(user_query)
+        response = self.multi_modal_agent.run(user_query)
 
         # Display AI's response in the AI text box
         self.ai_text_box.insert(tk.END, "\n"+response, 'ai')
