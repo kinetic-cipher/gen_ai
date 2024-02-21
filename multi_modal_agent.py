@@ -62,7 +62,7 @@ class MultiModalAgent:
         self.palchain = PALChain.from_math_prompt(llm=self.llm, verbose=True, timeout=REQ_TIMEOUT)
 
         # for image generation requests
-        self.open_ai_client= OpenAI()
+        self.open_ai_client = OpenAI()
 
 
     def display_image_from_url(self,url, width, height):
@@ -87,24 +87,25 @@ class MultiModalAgent:
                                                            "query_type5":QUERY_TYPE5,"user_input":user_input})
      
         # call the appropriate chain
-        category_response_txt = category_response["text"]
+        category_response_txt = category_response["text"].lower()
+        print(f"\ncategory response: {category_response_txt}")
 
         if "basic" in category_response_txt:
-            print("\n(interpreting as a basic math query)") 
+            print("(interpreting as a basic math query)") 
             response = self.llm_basic_math.invoke(user_input)
             response = response["answer"]
         elif "symbolic" in category_response_txt:
-            print("\n(interpreting as a symbolic math query)") 
+            print("(interpreting as a symbolic math query)") 
             response = self.llm_symbolic_math.invoke(user_input)
             response = response["answer"]
         elif "word" in category_response_txt:
-            print("\n(interpreting as a word problem)") 
+            print("(interpreting as a word problem)") 
             response = self.palchain.invoke(user_input)
             response = response["result"]
-        elif "image" or "generation" in category_response_txt:
+        elif "image" in category_response_txt or "generation" in category_response_txt:
             
             # call DALL-E3 for image request
-            print("\n(interpreting as an image generation request)") 
+            print("(interpreting as an image generation request)") 
             dalle_response = self.open_ai_client.images.generate(
             model="dall-e-3",
             prompt=user_input,
@@ -115,10 +116,10 @@ class MultiModalAgent:
 
             # show the result that was pushed in the response url
             url = dalle_response.data[0].url
-            self.display_image_from_url(url, 1024, 1024)
+            self.display_image_from_url(url, 1024,1024)
             response = "image generation complete"
         else:
-            print("\n(interpreting as a generic query)") 
+            print("(interpreting as a generic query)") 
             response = self.llm_chat_generic.invoke({"user_input":user_input})
             response = response["text"]
 
