@@ -5,6 +5,10 @@ from multi_modal_agent import MultiModalAgent
 
 class AIChatUI:
 
+    def clear_user_text_box(self,event):
+        self.user_text_box.delete(1.0, tk.END)  # Delete all text in the text box
+        self.user_text_box.mark_set("insert", "1.0")  # Move cursor to the beginning of the text box
+
     def _setupUI(self, master):
         self.master = master
         master.title("AI Chat")
@@ -37,6 +41,7 @@ class AIChatUI:
 
         # Bind the 'Return' key to the process_query function
         self.user_text_box.bind("<Return>", self.process_query)
+        self.user_text_box.bind("<Button-1>", self.clear_user_text_box)
 
 
     def __init__(self, master):
@@ -56,7 +61,7 @@ class AIChatUI:
         user_query = self.user_text_box.get(tk.END + "-2l", tk.END).strip()
 
         # Display user's query in the user text box
-        self.user_text_box.insert(tk.END, "\n" + user_query, 'user')
+        #self.user_text_box.insert(tk.END, "\n" + user_query, 'user')
 
         # Call the math agent
         #response = self.math_agent.run(user_query)
@@ -70,7 +75,7 @@ class AIChatUI:
         self.ai_text_box.yview(tk.END)
 
         # Clear the user's input in the user text box
-        self.user_text_box.delete(tk.END + "-2l", tk.END)
+        #self.user_text_box.delete(tk.END + "-2l", tk.END)
 
 if __name__ == "__main__":
     root = tk.Tk()
