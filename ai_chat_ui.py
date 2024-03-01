@@ -9,6 +9,10 @@ class AIChatUI:
         self.user_text_box.delete(1.0, tk.END)  # Delete all text in the text box
         self.user_text_box.mark_set("insert", "1.0")  # Move cursor to the beginning of the text box
 
+    def clear_ai_text_box(self,event):
+        self.ai_text_box.delete(1.0, tk.END)  # Delete all text in the text box
+        self.ai_text_box.mark_set("insert", "1.0")  # Move cursor to the beginning of the text box
+
     def _setupUI(self, master):
         self.master = master
         master.title("AI Chat")
@@ -42,6 +46,7 @@ class AIChatUI:
         # Bind the 'Return' key to the process_query function
         self.user_text_box.bind("<Return>", self.process_query)
         self.user_text_box.bind("<Button-1>", self.clear_user_text_box)
+        self.ai_text_box.bind("<Button-1>", self.clear_ai_text_box)
 
 
     def __init__(self, master):
